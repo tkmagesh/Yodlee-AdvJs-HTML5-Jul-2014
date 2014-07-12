@@ -9,6 +9,18 @@
 	2. Toggle a task as completed/incomplete
 	3. Remove Completed tasks
 	4. Persist the data so that it is available on the client side
+
+	LocalStoage
+	window.localStorage
+		- key value bag
+		- key and value should be string
+
+		-value getItem(key)
+		-void setItem(key,value)
+		-void removeItem(key)
+		-void clear()
+		-number length
+		-key key(number)
 	-->
 	<style>
 		.completed {
@@ -18,27 +30,70 @@
 		}
 	</style>
 	<script>
+	function getTaskStorage(){
+		var storage = window.localStorage;
+		return {
+			add : function(taskName){
+				var id = new Date().getTime().toString();
+				storage.setItem(id,taskName);
+				return {
+					id : id,
+					name : taskName
+				};
+			},
+			remove : function(id){
+				storage.removeItem(id);
+			},
+			getAll : function(){
+				var tasks = [];
+				for(var i=0;i<storage.length;i++){
+					var id = storage.key(i);
+					var taskName = storage.getItem(id);
+					var task = {
+						id : id,
+						name : taskName
+					};
+					tasks.push(task);
+				}
+				return tasks;
+			}
+		}
+	}
 	(function(){
+		var taskStorage = getTaskStorage();
 		window.addEventListener("DOMContentLoaded",init);
 		function init(){
 			document.getElementById("btnAddTask").addEventListener("click",onBtnAddTaskClick);
 			document.getElementById("btnRemoveCompleted").addEventListener("click",onBtnRemoveCompletedClick);
+			var tasks = taskStorage.getAll();
+			for(var i=0;i<tasks.length;i++)
+				addTaskToUI(tasks[i]);
+
 		}
 		function onBtnAddTaskClick(){
 			var taskName = document.getElementById("txtTask").value;
-			var newTask = document.createElement("li");
-			newTask.innerHTML = taskName;
-			newTask.addEventListener("click", onTaskItemClick);
-			document.getElementById("ulTaskList").appendChild(newTask);
+			var newTask = taskStorage.add(taskName);
+			addTaskToUI(newTask);
+			
 		}
+		function addTaskToUI(task){
+			var newTaskLi = document.createElement("li");
+			newTaskLi.innerHTML = task.name;
+			newTaskLi.setAttribute("task-id", task.id);
+			newTaskLi.addEventListener("click", onTaskItemClick);
+			document.getElementById("ulTaskList").appendChild(newTaskLi);
+		}
+
 		function onTaskItemClick(){
 			this.classList.toggle("completed");
 		}
 		function onBtnRemoveCompletedClick(){
 			var tasks = document.getElementById("ulTaskList").children;
 			for(var i=tasks.length-1;i>=0;i--)
-				if (tasks[i].classList.contains("completed"))
+				if (tasks[i].classList.contains("completed")){
+					taskStorage.remove(tasks[i].getAttribute("task-id"))
 					tasks[i].remove();
+				}
 
 		}
 	})();
