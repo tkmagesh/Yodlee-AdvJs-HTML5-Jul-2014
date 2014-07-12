@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>CSS 3.0</title>
+	<style>
+	.content{
+		margin: 100px;
+		height: 300px;
+		width: 300px;
+		text-align: center;
+		font-size: 28pt;
+		line-height: 300px;
+		color : white;
+	
+		border-radius: 10px;
+		border : 5px solid black;
+		background: -moz-linear-gradient(top left, yellow 0%, red 50%, green 100%);
+		background: -webkit-linear-gradient(top left, yellow 0%, red 50%, green 100%);
+		background: -ms-linear-gradient(top left, yellow 0%, red 50%, green 100%);
+		background: -o-linear-gradient(top left, yellow 0%, red 50%, green 100%);
+		background: linear-gradient(top left, yellow 0%, red 50%, green 100%);
+
+		box-shadow: 0px 0px 0px 5px white, 0px 0px 0px 10px blue, 0px 0px 0px 15px red;
+		text-shadow: 2px 2px 0px black;
+		-moz-transition: -moz-transform 0.5s;
+
+	}
+	.content:hover{
+		-moz-transform: scale(0.5,0.5) rotate(45deg);
+	}
+	</style>
+</head>
+<body>
+	<div class="content">YODLEE</div>
+</body>
+</html>
