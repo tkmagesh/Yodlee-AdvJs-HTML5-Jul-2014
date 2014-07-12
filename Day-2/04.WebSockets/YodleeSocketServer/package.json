@@ -1,0 +1,14 @@
+{
+  "name": "YodleeSocketServer",
+  "version": "0.1.0",
+  "description": "A sample socket server",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Magesh K",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "nodejs-websocket": "~0.1.5"
+  }
+}
