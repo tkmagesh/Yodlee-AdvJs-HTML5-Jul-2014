@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Browser Threading</title>
+	<script>
+	(function(){
+		window.addEventListener("DOMContentLoaded",init);
+		function init(){
+			document.getElementById("btnDoWork").addEventListener("click", onBtnDoWorkClick);
+		}
+		function onBtnDoWorkClick(){
+			displayMessage("Work Started..");
+			var worker = new Worker("complexWorker.js");
+			worker.addEventListener("message", function(msgEvtArg){
+				var data = msgEvtArg.data;
+				if (data.type === "completed"){
+					displayMessage("Work Completed..");
+					document.getElementById("spanPercentCompleted").innerHTML = "100% completed"; 
+				} else if (data.type === "progress"){
+					document.getElementById("progress").value = data.percentCompleted;
+					document.getElementById("spanPercentCompleted").innerHTML = data.percentCompleted + "% completed"; 
+				} else {
+					console.log("unknown message received from the worker", data);
+				}
+			});
+			worker.postMessage({type : "start"});
+			
+		}
+		
+		function displayMessage(msg){
+			document.getElementById("divMessages").innerHTML += msg + "<br/>";
+		}
+	})();
+	</script>
+</head>
+<body>
+	<input type="text" name="" id="">
+	<input type="button" value="Do Work" id="btnDoWork">
+	<div>
+		<progress id="progress" min="0" max="100" value="0"></progress><span id="spanPercentCompleted"></span>
+	</div>
+	<div id="divMessages"></div>
+</body>
+</html>
